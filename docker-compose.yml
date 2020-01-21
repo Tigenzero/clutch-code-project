@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  flaskr:
+    build: ./services/flaskr
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/flaskr:/usr/src/app/
+    ports:
+      - 5000:5000
+    env_file:
+      - ./.env.dev
+  db:
+    image: kartoza/postgis:12.0
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+#      TODO: CHANGE LATER
+      - POSTGRES_USER=clutch_user
+      - POSTGRES_PASSWORD=clutch_password
+      - POSTGRES_DB=clutch_dev
+volumes:
+  postgres_data:
