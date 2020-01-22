@@ -23,7 +23,7 @@ def geocode_address():
     if ADDRESS_ARG in request.args:
         address = request.args[ADDRESS_ARG]
     else:
-        return "ERROR: Address not found. Please provide an address"
+        return jsonify({"ERROR": "Address not found. Please provide an address"})
 
     lat_long_dict = global_google_geocoder.get_address(address)
     result = global_PostGIS.get_state_from_lat_long(lat_long_dict)
