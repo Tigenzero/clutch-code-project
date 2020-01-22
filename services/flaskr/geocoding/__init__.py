@@ -2,6 +2,7 @@ import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from .google_geocoder.google_geocoder import GoogleGeocoder
+from .postgis.postgis import PostGIS
 
 
 app = Flask(__name__)
@@ -11,18 +12,8 @@ db = SQLAlchemy(app)
 ADDRESS_ARG = 'address'
 
 API_KEY = os.getenv("API_KEY")
-GLOBAL_GOOGLE_GEOCODER = GoogleGeocoder(API_KEY)
-
-# TODO: example code: replace with lat/long schema once determined
-class User(db.Model):
-    __tablename__ = "users"
-
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(128), unique=True, nullable=False)
-    active = db.Column(db.Boolean(128), default=True, nullable=False)
-
-    def __init__(self, email):
-        self.email = email
+global_google_geocoder = GoogleGeocoder(API_KEY)
+PostGIS = PostGIS()
 
 
 @app.route("/")
@@ -37,6 +28,8 @@ def geocode_address():
     else:
         return "ERROR: Address not found. Please provide an address"
 
-    lat_long = GLOBAL_GOOGLE_GEOCODER.get_address(address)
-#     TODO: get the shape file state result from DB
-    return jsonify(lat_long)
+    # lat_long_dict = GLOBAL_GOOGLE_GEOCODER.get_address(address)
+    lat_long_dict = {'lat': 30.2587478, 'lng': -97.6716534}
+    # print(lat_long_dict)
+    result = PostGIS.get_state_from_lat_long(lat_long_dict)
+    return jsonify({"state": result})

@@ -12,7 +12,12 @@ class GoogleGeocoder(object):
         return self._parse_geocode_object(geocode_object)
 
     def _parse_geocode_object(self, geocode_object):
-        return geocode_object[0]["geometry"]["location"]
+        if len(geocode_object) > 0 and "geometry" in geocode_object[0] and "location" in geocode_object[0]["geometry"]:
+            return geocode_object[0]["geometry"]["location"]
+        elif len(geocode_object) == 0:
+            raise LookupError(f"Address provided not found: {geocode_object}")
+        elif len(geocode_object) > 0 and "geometry" in geocode_object[0]:
+            raise KeyError(f"Address was found but location could not be determined. {geocode_object}")
 
     def get_address(self, address, debug_delay=False):
         # TODO: implement queue of threads to handle the IO

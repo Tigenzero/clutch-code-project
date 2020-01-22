@@ -13,6 +13,6 @@ fi
 
 echo "PostgreSQL started"
 
-python manage.py create_db
+python3 manage.py create_db
 
 exec "$@"
