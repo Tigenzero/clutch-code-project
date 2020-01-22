@@ -15,4 +15,6 @@ echo "PostgreSQL started"
 
 python3 manage.py create_db
 
+python3 manage.py seed_db
+
 exec "$@"
