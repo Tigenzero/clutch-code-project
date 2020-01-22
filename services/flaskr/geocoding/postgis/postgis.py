@@ -59,7 +59,6 @@ class PostGIS(object):
         cursor = connection.cursor()
         shapefile = self.get_shapefile()
         layer = shapefile.GetLayer(0)
-        print()
         for i in range(layer.GetFeatureCount()):
             fields = self.get_feature_fields(layer.GetFeature(i))
             cursor.execute("INSERT INTO borders (name, outline) "
