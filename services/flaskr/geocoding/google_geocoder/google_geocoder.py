@@ -7,7 +7,7 @@ class GoogleGeocoder(object):
         self.gmap = googlemaps.Client(key=api_key)
         self.queue = deque()
 
-    def _get_address_lat_long(self, address):
+    def _get_geocoded_lat_long(self, address):
         geocode_object = self.gmap.geocode(address)
         return self._parse_geocode_object(geocode_object)
 
@@ -19,6 +19,5 @@ class GoogleGeocoder(object):
         elif len(geocode_object) > 0 and "geometry" in geocode_object[0]:
             raise KeyError(f"Address was found but location could not be determined. {geocode_object}")
 
-    def get_address(self, address, debug_delay=False):
-        # TODO: implement queue of threads to handle the IO
-        return self._get_address_lat_long(address)
+    def get_lat_long_from_address(self, address):
+        return self._get_geocoded_lat_long(address)
